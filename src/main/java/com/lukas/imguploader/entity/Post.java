@@ -63,56 +63,34 @@ public class Post {
     return id;
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public String getCaption() {
     return caption;
-  }
-
-  public void setCaption(String caption) {
-    this.caption = caption;
   }
 
   public LocalDateTime getCreatedDate() {
     return createdDate;
   }
 
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
-  }
-
   public Integer getLikes() {
     return likes;
-  }
-
-  public void setLikes(Integer likes) {
-    this.likes = likes;
   }
 
   public String getLocation() {
     return location;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
-  }
 
   public String getTitle() {
     return title;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
 
   public Long getUserId() {
     return userId;
   }
 
-  public void setUserId(Long userId) {
-    this.userId = userId;
+  public Collection<Comment> getCommentsById() {
+    return commentsById;
   }
 
   @Override
@@ -163,9 +141,7 @@ public class Post {
     return result;
   }
 
-  public Collection<Comment> getCommentsById() {
-    return commentsById;
-  }
+
 
 
 

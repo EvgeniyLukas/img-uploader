@@ -93,55 +93,9 @@ public class Comment {
     this.postId = postId;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    Comment that = (Comment) o;
-
-    if (id != null ? !id.equals(that.id) : that.id != null) {
-      return false;
-    }
-    if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) {
-      return false;
-    }
-    if (message != null ? !message.equals(that.message) : that.message != null) {
-      return false;
-    }
-    if (userId != null ? !userId.equals(that.userId) : that.userId != null) {
-      return false;
-    }
-    if (username != null ? !username.equals(that.username) : that.username != null) {
-      return false;
-    }
-    if (postId != null ? !postId.equals(that.postId) : that.postId != null) {
-      return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    int result = id != null ? id.hashCode() : 0;
-    result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
-    result = 31 * result + (message != null ? message.hashCode() : 0);
-    result = 31 * result + (userId != null ? userId.hashCode() : 0);
-    result = 31 * result + (username != null ? username.hashCode() : 0);
-    result = 31 * result + (postId != null ? postId.hashCode() : 0);
-    return result;
-  }
 
   public Post getPostByPostId() {
     return postByPostId;
   }
 
-  public void setPostByPostId(Post postByPostId) {
-    this.postByPostId = postByPostId;
-  }
 }
