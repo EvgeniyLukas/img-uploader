@@ -1,7 +1,7 @@
 package com.lukas.imguploader.sucurity;
 
 import com.lukas.imguploader.entity.User;
-import com.lukas.imguploader.service.MyUserDetailService;
+import com.lukas.imguploader.service.ImplUserDetailService;
 import java.io.IOException;
 import java.util.Collections;
 import javax.servlet.FilterChain;
@@ -23,7 +23,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
   private JWTTokenProvider jwtTokenProvider;
 
-  private MyUserDetailService userDetailService;
+  private ImplUserDetailService userDetailService;
 
   @Autowired
   public void setJwtTokenProvider(JWTTokenProvider jwtTokenProvider) {
@@ -31,7 +31,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
   }
 
   @Autowired
-  public void setUserDetailService(MyUserDetailService userDetailService) {
+  public void setUserDetailService(ImplUserDetailService userDetailService) {
     this.userDetailService = userDetailService;
   }
 

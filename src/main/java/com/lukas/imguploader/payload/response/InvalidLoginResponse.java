@@ -1,4 +1,4 @@
-package com.lukas.imguploader.response;
+package com.lukas.imguploader.payload.response;
 
 import lombok.Getter;
 

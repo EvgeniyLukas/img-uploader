@@ -1,7 +1,7 @@
 package com.lukas.imguploader.sucurity;
 
 import com.google.gson.Gson;
-import com.lukas.imguploader.response.InvalidLoginResponse;
+import com.lukas.imguploader.payload.response.InvalidLoginResponse;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
