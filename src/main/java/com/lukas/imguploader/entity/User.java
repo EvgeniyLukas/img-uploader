@@ -124,46 +124,6 @@ public class User implements UserDetails {
   }
 
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getBio() {
-    return bio;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-
-  public String getLastname() {
-    return lastname;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-
-  public String getUsername() {
-    return username;
-  }
-
-
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public Collection<Post> getPostsById() {
-    return postsById;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {

@@ -1,5 +1,6 @@
 package com.lukas.imguploader.controller;
 
+import com.lukas.imguploader.entity.User;
 import com.lukas.imguploader.payload.request.LoginRequest;
 import com.lukas.imguploader.payload.request.SignupRequest;
 import com.lukas.imguploader.payload.response.JWTTokenSuccessResponse;
@@ -30,39 +31,47 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize("permitAll()")
 public class AuthController {
 
-    @Autowired
-    private JWTTokenProvider jwtTokenProvider;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private ResponseErrorValidation responseErrorValidation;
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private JWTTokenProvider jwtTokenProvider;
+  @Autowired
+  private AuthenticationManager authenticationManager;
+  @Autowired
+  private ResponseErrorValidation responseErrorValidation;
+  @Autowired
+  private UserService userService;
 
-    @PostMapping("/signin")
-    public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
-        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
-        if (!ObjectUtils.isEmpty(errors)) return errors;
+  @PostMapping("/signin")
+  public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
+      BindingResult bindingResult) {
+    ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
+    if (!ObjectUtils.isEmpty(errors)) {
+      return errors;
+    }
 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(),
-                loginRequest.getPassword()
+    Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            loginRequest.getUsername(),
+            loginRequest.getPassword()
         ));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
 
-        return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
+    return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
+  }
+
+
+  @PostMapping("/signup")
+  public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest,
+      BindingResult bindingResult) {
+    ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
+    if (!ObjectUtils.isEmpty(errors)) {
+      return errors;
     }
 
-
-    @PostMapping("/signup")
-    public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
-        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
-        if (!ObjectUtils.isEmpty(errors)) return errors;
-
-        userService.createUser(signupRequest);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-    }
+    User user = userService.createUser(signupRequest);
+    return ResponseEntity.ok(
+        new MessageResponse("User " + user.getUsername() + " registered successfully!"));
+  }
 
 }

@@ -45,27 +45,7 @@ public class ImageModel {
   @JsonIgnore
   private Long userId;
 
-  public Long getId() {
-    return id;
-  }
 
-
-  public byte[] getImageBytes() {
-    return imageBytes;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public Long getPostId() {
-    return postId;
-  }
-
-  public Long getUserId() {
-    return userId;
-  }
 
   @Override
   public boolean equals(Object o) {
