@@ -1,4 +1,4 @@
-package com.lukas.imguploader.sucurity;
+package com.lukas.imguploader.security;
 
 import com.lukas.imguploader.entity.User;
 import io.jsonwebtoken.Claims;

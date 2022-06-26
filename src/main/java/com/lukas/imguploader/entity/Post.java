@@ -43,10 +43,10 @@ public class Post {
   @Basic
   @Column(name = "title", nullable = true, length = 255)
   private String title;
-  @Basic
-  @Column(name = "user_id", nullable = true)
-  private Long userId;
-  @OneToMany(mappedBy = "postByPostId", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+//  @Basic
+//  @Column(name = "user_id", nullable = true)
+//  private Long userId;
+  @OneToMany(mappedBy = "post", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
   private List<Comment> commentsById;
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
@@ -85,9 +85,7 @@ public class Post {
   }
 
 
-  public Long getUserId() {
-    return userId;
-  }
+
 
   public Collection<Comment> getCommentsById() {
     return commentsById;
@@ -122,9 +120,6 @@ public class Post {
     if (title != null ? !title.equals(that.title) : that.title != null) {
       return false;
     }
-    if (userId != null ? !userId.equals(that.userId) : that.userId != null) {
-      return false;
-    }
 
     return true;
   }
@@ -137,7 +132,6 @@ public class Post {
     result = 31 * result + (likes != null ? likes.hashCode() : 0);
     result = 31 * result + (location != null ? location.hashCode() : 0);
     result = 31 * result + (title != null ? title.hashCode() : 0);
-    result = 31 * result + (userId != null ? userId.hashCode() : 0);
     return result;
   }
 

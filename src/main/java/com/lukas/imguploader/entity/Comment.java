@@ -33,12 +33,17 @@ public class Comment {
   @Basic
   @Column(name = "username", nullable = false, length = 255)
   private String username;
-  @Basic
-  @Column(name = "post_id", nullable = true)
-  private Long postId;
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "post_id", referencedColumnName = "id")
-  private Post postByPostId;
+  private Post post;
+
+
+//  @Basic
+//  @Column(name = "post_id", nullable = true)
+//  private Long postId;
+
+//  @ManyToOne(fetch = FetchType.EAGER)
+//  @JoinColumn(name = "post_id", referencedColumnName = "id")
+//  private Post postByPostId;
 
   @PrePersist
   public void onCreate() {
@@ -85,17 +90,6 @@ public class Comment {
     this.username = username;
   }
 
-  public Long getPostId() {
-    return postId;
-  }
 
-  public void setPostId(Long postId) {
-    this.postId = postId;
-  }
-
-
-  public Post getPostByPostId() {
-    return postByPostId;
-  }
 
 }

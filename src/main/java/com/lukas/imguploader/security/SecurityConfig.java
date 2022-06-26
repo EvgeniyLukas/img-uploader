@@ -1,4 +1,4 @@
-package com.lukas.imguploader.sucurity;
+package com.lukas.imguploader.security;
 
 import com.lukas.imguploader.service.ImplUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;

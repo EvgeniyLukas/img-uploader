@@ -1,4 +1,4 @@
-package com.lukas.imguploader.sucurity;
+package com.lukas.imguploader.security;
 
 import com.google.gson.Gson;
 import com.lukas.imguploader.payload.response.InvalidLoginResponse;

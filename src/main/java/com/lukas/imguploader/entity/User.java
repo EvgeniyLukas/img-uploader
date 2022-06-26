@@ -3,6 +3,7 @@ package com.lukas.imguploader.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -69,7 +70,7 @@ public class User implements UserDetails {
   @ElementCollection(targetClass = ERole.class)
   @CollectionTable(name = "user_role",
       joinColumns = @JoinColumn(name = "user_id"))
-  private Set<ERole> userRolesById;
+  private Set<ERole> userRolesById = new HashSet<>();
 
   @Transient
   private Collection<? extends GrantedAuthority> authorities;
