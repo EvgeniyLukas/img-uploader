@@ -2,6 +2,7 @@ package com.lukas.imguploader.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -34,73 +35,73 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Setter
 @ToString
-@Table(name = "user", schema = "mysocial")
 public class User implements UserDetails {
 
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
-  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Basic
-  @Column(name = "bio", columnDefinition = "text", length = -1)
-  private String bio;
-  @Basic
-  @Column(name = "created_date", nullable = true, updatable = false)
-  @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
-  private LocalDateTime createdDate;
-  @Basic
-  @Column(name = "email", unique = true, length = 255)
-  private String email;
-  @Basic
-  @Column(name = "lastname", nullable = false, length = 255)
-  private String lastname;
-  @Basic
-  @Column(name = "name", nullable = false, length = 255)
+
+  @Column(nullable = false)
   private String name;
-  @Basic
-  @Column(name = "password", nullable = true, length = 3000)
-  private String password;
-  @Basic
-  @Column(name = "username", unique = true, length = 255)
+  @Column(unique = true, updatable = false)
   private String username;
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-  @Exclude
-  private List<Post> postsById;
+
+  @Column(nullable = false)
+  private String lastname;
+  @Column(unique = true)
+  private String email;
+
+  @Column(columnDefinition = "text")
+  private String bio;
+  @Column(length = 3000)
+  private String password;
 
   @ElementCollection(targetClass = ERole.class)
   @CollectionTable(name = "user_role",
       joinColumns = @JoinColumn(name = "user_id"))
-  private Set<ERole> userRolesById = new HashSet<>();
+  private Set<ERole> roles = new HashSet<>();
+
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
+  @Exclude
+  private List<Post> posts = new ArrayList<>();
+
+  @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+  @Column(updatable = false)
+  private LocalDateTime createdDate;
 
   @Transient
   private Collection<? extends GrantedAuthority> authorities;
 
-
   public User() {
   }
 
-  public User(
-      Long id,
+  public User(Long id,
+      String username,
       String email,
       String password,
-      String username,
       Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
+    this.username = username;
     this.email = email;
     this.password = password;
-    this.username = username;
     this.authorities = authorities;
   }
 
   @PrePersist
-  public void onCreate() {
+  protected void onCreate() {
     this.createdDate = LocalDateTime.now();
   }
+
+  /**
+   * SECURITY
+   */
+
 
 
   @Override
   public String getPassword() {
-    return this.password;
+    System.out.println("password = " + password);
+    return password;
   }
 
   @Override
@@ -122,7 +123,6 @@ public class User implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
-
 
   @Override
   public boolean equals(Object o) {

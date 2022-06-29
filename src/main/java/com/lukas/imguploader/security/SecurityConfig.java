@@ -24,20 +24,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+  @Autowired
   private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-  private ImplUserDetailService userDetailService;
-
-
   @Autowired
-  public void setJwtAuthenticationEntryPoint(
-      JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
-    this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-  }
+  private ImplUserDetailService implUserDetailService;
 
-  @Autowired
-  public void setUserDetailService(ImplUserDetailService userDetailService) {
-    this.userDetailService = userDetailService;
-  }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -55,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
+    auth.userDetailsService(implUserDetailService).passwordEncoder(bCryptPasswordEncoder());
   }
 
   @Override
@@ -64,17 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return super.authenticationManager();
   }
 
-//  @Override
-//  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//    auth
-//        .jdbcAuthentication()
-//        .dataSource(dataSource)
-//        .usersByUsernameQuery("select email, '$2a'||substring(password from 4) as password, 1 AS enabled from users where email=?")
-//        .passwordEncoder(new BCryptPasswordEncoder());
-//  }
-
   @Bean
-  BCryptPasswordEncoder passwordEncoder() {
+  BCryptPasswordEncoder bCryptPasswordEncoder() {
     return new BCryptPasswordEncoder();
   }
 

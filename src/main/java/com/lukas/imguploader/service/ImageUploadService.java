@@ -57,7 +57,8 @@ public class ImageUploadService {
 
     public ImageModel uploadImageToPost(MultipartFile file, Principal principal, Long postId) throws IOException {
         User user = getUserByPrincipal(principal);
-        Post post = user.getPostsById()
+        //Post post = user.getPostsById()
+        Post post = user.getPosts()
                 .stream()
                 .filter(p -> p.getId().equals(postId))
                 .collect(toSinglePostCollector());

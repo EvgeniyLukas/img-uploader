@@ -41,18 +41,14 @@ public class AuthController {
   private UserService userService;
 
   @PostMapping("/signin")
-  public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
-      BindingResult bindingResult) {
+  public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
     ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
-    if (!ObjectUtils.isEmpty(errors)) {
-      return errors;
-    }
+    if (!ObjectUtils.isEmpty(errors)) return errors;
 
-    Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            loginRequest.getUsername(),
-            loginRequest.getPassword()
-        ));
+    Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+        loginRequest.getUsername(),
+        loginRequest.getPassword()
+    ));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
     String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
@@ -62,16 +58,12 @@ public class AuthController {
 
 
   @PostMapping("/signup")
-  public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest,
-      BindingResult bindingResult) {
+  public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
     ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
-    if (!ObjectUtils.isEmpty(errors)) {
-      return errors;
-    }
+    if (!ObjectUtils.isEmpty(errors)) return errors;
 
-    User user = userService.createUser(signupRequest);
-    return ResponseEntity.ok(
-        new MessageResponse("User " + user.getUsername() + " registered successfully!"));
+    userService.createUser(signupRequest);
+    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
 
 }

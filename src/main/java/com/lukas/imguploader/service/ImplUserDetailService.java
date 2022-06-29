@@ -15,19 +15,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImplUserDetailService implements UserDetailsService {
 
-
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
   @Autowired
-  public void setUserRepository(UserRepository userRepository) {
+  public ImplUserDetailService(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
   @Override
   public UserDetails loadUserByUsername(String username) {
     User user = userRepository.findUserByEmail(username)
-        .orElseThrow(
-            () -> new UsernameNotFoundException("Username not found with username: " + username));
+        .orElseThrow(() -> new UsernameNotFoundException("Username not found with username: " + username));
 
     return build(user);
   }
@@ -38,7 +36,8 @@ public class ImplUserDetailService implements UserDetailsService {
 
 
   public static User build(User user) {
-    List<GrantedAuthority> authorities = user.getUserRolesById().stream()
+    //List<GrantedAuthority> authorities = user.getUserRolesById().stream()
+    List<GrantedAuthority> authorities = user.getRoles().stream()
         .map(role -> new SimpleGrantedAuthority(role.name()))
         .collect(Collectors.toList());
 
