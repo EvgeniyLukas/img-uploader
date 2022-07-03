@@ -2,7 +2,9 @@ package com.lukas.imguploader.controller;
 
 
 import com.lukas.imguploader.dto.PostDTO;
+import com.lukas.imguploader.dto.UserDTO;
 import com.lukas.imguploader.entity.Post;
+import com.lukas.imguploader.entity.User;
 import com.lukas.imguploader.facade.PostFacade;
 import com.lukas.imguploader.payload.response.MessageResponse;
 import com.lukas.imguploader.service.PostService;
@@ -29,61 +31,72 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class PostController {
 
-    @Autowired
-    private PostFacade postFacade;
-    @Autowired
-    private PostService postService;
-    @Autowired
-    private ResponseErrorValidation responseErrorValidation;
+  @Autowired
+  private PostFacade postFacade;
+  @Autowired
+  private PostService postService;
+  @Autowired
+  private ResponseErrorValidation responseErrorValidation;
 
-    @PostMapping("/create")
-    public ResponseEntity<Object> createPost(@Valid @RequestBody PostDTO postDTO,
-                                             BindingResult bindingResult,
-                                             Principal principal) {
-        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
-        if (!ObjectUtils.isEmpty(errors)) return errors;
-
-        Post post = postService.createPost(postDTO, principal);
-        PostDTO createdPost = postFacade.postToPostDTO(post);
-
-        return new ResponseEntity<>(createdPost, HttpStatus.OK);
+  @PostMapping("/create")
+  public ResponseEntity<Object> createPost(@Valid @RequestBody PostDTO postDTO,
+      BindingResult bindingResult,
+      Principal principal) {
+    ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
+    if (!ObjectUtils.isEmpty(errors)) {
+      return errors;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<PostDTO>> getAllPosts() {
-        List<PostDTO> postDTOList = postService.getAllPosts()
-                .stream()
-                .map(postFacade::postToPostDTO)
-                .collect(Collectors.toList());
+    Post post = postService.createPost(postDTO, principal);
+    PostDTO createdPost = postFacade.postToPostDTO(post);
 
-        return new ResponseEntity<>(postDTOList, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(createdPost, HttpStatus.OK);
+  }
 
-    //получаем все посты текущего пользователя
-    @GetMapping("/user/posts")
-    public ResponseEntity<List<PostDTO>> getAllPostsForUser(Principal principal) {
-        List<PostDTO> postDTOList = postService.getAllPostForUser(principal)
-                .stream()
-                .map(postFacade::postToPostDTO)
-                .collect(Collectors.toList());
+  @GetMapping("/all")
+  public ResponseEntity<List<PostDTO>> getAllPosts() {
+    List<PostDTO> postDTOList = postService.getAllPosts()
+        .stream()
+        .map(postFacade::postToPostDTO)
+        .collect(Collectors.toList());
 
-        return new ResponseEntity<>(postDTOList, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(postDTOList, HttpStatus.OK);
+  }
 
-    //работает когда лайкаем пост
-    @PostMapping("/{postId}/{username}/like")
-    public ResponseEntity<PostDTO> likePost(@PathVariable("postId") String postId,
-                                            @PathVariable("username") String username) {
-        Post post = postService.likePost(Long.parseLong(postId), username);
-        PostDTO postDTO = postFacade.postToPostDTO(post);
+  //получаем все посты текущего пользователя
+  @GetMapping("/user/posts")
+  public ResponseEntity<List<PostDTO>> getAllPostsForUser(Principal principal) {
+    List<PostDTO> postDTOList = postService.getAllPostForUser(principal)
+        .stream()
+        .map(postFacade::postToPostDTO)
+        .collect(Collectors.toList());
 
-        return new ResponseEntity<>(postDTO, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(postDTOList, HttpStatus.OK);
+  }
 
-    //удалить пост можно только если он принадлежит пользователю
-    @PostMapping("/{postId}/delete")
-    public ResponseEntity<MessageResponse> deletePost(@PathVariable("postId") String postId, Principal principal) {
-        postService.deletePost(Long.parseLong(postId), principal);
-        return new ResponseEntity<>(new MessageResponse("Post was deleted"), HttpStatus.OK);
-    }
+  //работает когда лайкаем пост
+  @PostMapping("/{postId}/{username}/like")
+  public ResponseEntity<PostDTO> likePost(@PathVariable("postId") String postId,
+      @PathVariable("username") String username) {
+    Post post = postService.likePost(Long.parseLong(postId), username);
+    PostDTO postDTO = postFacade.postToPostDTO(post);
+
+    return new ResponseEntity<>(postDTO, HttpStatus.OK);
+  }
+
+  //удалить пост можно только если он принадлежит пользователю
+  @PostMapping("/{postId}/delete")
+  public ResponseEntity<MessageResponse> deletePost(@PathVariable("postId") String postId,
+      Principal principal) {
+    postService.deletePost(Long.parseLong(postId), principal);
+    return new ResponseEntity<>(new MessageResponse("Post was deleted"), HttpStatus.OK);
+  }
+
+  @PostMapping("/update")
+  public ResponseEntity<Object> updateUser(@RequestBody Post post,
+      Principal principal) {
+    Post postUpdate = postService.updatePost(post, principal);
+    PostDTO postDTO = postFacade.postToPostDTO(postUpdate);
+    return new ResponseEntity<>(postDTO, HttpStatus.OK);
+  }
 }
